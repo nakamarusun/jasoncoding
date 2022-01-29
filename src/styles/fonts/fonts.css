@@ -1,0 +1,29 @@
+@font-face {
+  font-family: "ZenMaruGothic";
+  font-weight: 400;
+  src: url(./ZenMaruGothic-Regular.ttf);
+}
+
+@font-face {
+  font-family: "ZenMaruGothic";
+  font-weight: 500;
+  src: url(./ZenMaruGothic-Medium.ttf);
+}
+
+@font-face {
+  font-family: "ZenMaruGothic";
+  font-weight: 300;
+  src: url(./ZenMaruGothic-Light.ttf);
+}
+
+@font-face {
+  font-family: "ZenMaruGothic";
+  font-weight: 700;
+  src: url(./ZenMaruGothic-Bold.ttf);
+}
+
+@font-face {
+  font-family: "ZenMaruGothic";
+  font-weight: 900;
+  src: url(./ZenMaruGothic-Black.ttf);
+}
