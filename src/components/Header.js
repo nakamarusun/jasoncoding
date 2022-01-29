@@ -27,7 +27,7 @@ const Header = () => {
           </button>
         </div>
       </div>
-      <div className="bg-gray-100 w-full">yes</div>
+      <div className="bg-gray-100 w-full">Coming soon :D</div>
     </div>
   );
 };
