@@ -3,7 +3,8 @@ module.exports = {
   theme: {
     extend: {},
     fontFamily: {
-      sans: ["ZenMaruGothic", "sans-serif"],
+      sans: ["Zen Maru Gothic", "sans-serif"],
+      serif: ["Zen Antique", "serif"],
     },
   },
   plugins: [],
