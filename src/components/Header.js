@@ -1,15 +1,15 @@
 import React from "react";
-import logo from "../images/logo.svg";
+import Logo from "../images/logo.inline.svg";
+import "../images/logoanim.css";
 
 const Header = () => {
   return (
     <div className="w-full h-screen flex flex-row">
       <div className="w-full flex flex-row justify-center bg-black">
         <div className="max-w-4xl w-11/12 h-full flex flex-col justify-center items-center">
-          <img
+          <Logo
             // // className="max-h-[50%] h-full" // Forgive me, for i have to commit some evilness.
-            className="max-h-full filter invert"
-            src={logo}
+            className="max-h-full h-auto filter invert"
           />
           <h2 className="font-serif text-white text-right w-full text-3xl origin-right scale-x-[70%]">
             COMPUTER SCIENCE STUDENT, FULL-STACK DEVELOPER, DESIGNER

@@ -21,7 +21,7 @@ jobs:
         run: |
           npm install
           npm run build
-      - name: Sync file to jasoncoding with FTP
+      - name: Sync file to website with FTP
         uses: SamKirkland/FTP-Deploy-Action@4.2.0
         with:
           server: ftp.jasoncoding.com
