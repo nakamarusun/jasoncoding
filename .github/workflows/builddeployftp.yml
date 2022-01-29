@@ -1,0 +1,30 @@
+name: Deploy to jasoncoding
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  build-and-deploy:
+    name: Build and Deploy Website
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Use Node
+        uses: actions/setup_node@v2
+      - name: Build website
+        run: |
+          npm install
+          npm run build
+      - name: Sync file to jasoncoding with FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.2.0
+        with:
+          server: ftp.jasoncoding.com
+          username: ${{ secrets.FTPUSER }}
+          password: ${{ secrets.FTPPASS }}
+          port: 21
+          protocol: ftps
+          local-dir: ./public/
+          server-dir: ${{ secrets.FTPSERVERDIR }}
