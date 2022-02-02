@@ -5,7 +5,7 @@ const Header = () => {
   const [skipAnim, setSkipAnim] = useState(false);
 
   return (
-    <div className="w-full h-screen flex flex-col md:flex-row">
+    <div className="w-full h-screen flex flex-col-reverse md:flex-row">
       <Showcase
         skipAnim={skipAnim}
         setSkipAnim={() => {
