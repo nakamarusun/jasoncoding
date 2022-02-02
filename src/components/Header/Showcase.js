@@ -1,8 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Logo from "../../images/logo.inline.svg";
 import anime from "animejs";
+import PropTypes from "prop-types";
 
-const Showcase = () => {
+const Showcase = ({ skipAnim, setSkipAnim }) => {
+  // We have to use a reference so that it's not lost in the anime context
+  const skipAnimRef = useRef(skipAnim);
+
+  // This function triggers the sliding animation for informations
+  function slideInfo() {
+    anime
+      .timeline({})
+      .add({
+        targets: "#idpanel",
+        width: ["0%", "100%"],
+        height: ["0%", "100%"],
+        easing: "easeInOutQuart",
+        duration: 500,
+      })
+      .add(
+        {
+          targets: "#skipanimbtn",
+          opacity: ["1.0", "0.0"],
+          duration: 500,
+          complete: () => {
+            document.querySelector("#skipanimbtn").style.display = "none";
+          },
+        },
+        0
+      );
+  }
+
+  useEffect(() => {
+    skipAnimRef.current = skipAnim;
+    if (skipAnim) {
+      slideInfo(true);
+    }
+  }, [skipAnim]);
+
   useEffect(() => {
     // Recolor path to white
     const $logoPath = document.querySelectorAll("#mainlogo path");
@@ -43,27 +78,29 @@ const Showcase = () => {
           targets: ".showcasebutton",
           opacity: ["0.0", "1.0"],
           duration: 1,
-        },
-        "+=800"
-      )
-      .add(
-        {
-          targets: "#idpanel",
-          width: ["0%", "100%"],
-          easing: "easeInOutQuart",
-          duration: 500,
+          complete: () => {
+            // When the animation is completed, check for skip anim.
+            if (!skipAnimRef.current) setTimeout(slideInfo, 400);
+          },
         },
         "+=800"
       );
   }, []);
-
+  // TODO: Responsive phone not perfect 50%
   return (
-    <div className="w-full flex flex-row justify-center bg-black">
-      <div className="max-w-3xl w-11/12 h-full flex flex-col justify-center items-center">
+    <div className="relative w-full h-full flex flex-row justify-center bg-black">
+      <h5
+        id="skipanimbtn"
+        onClick={setSkipAnim}
+        className="absolute text-white font-bold bottom-4 left-4 text-center underline cursor-pointer select-none"
+      >
+        Skip animation.
+      </h5>
+      <div className="py-4 max-w-3xl w-11/12 h-full flex flex-col justify-center items-center">
         <Logo
           // // className="max-h-[50%] h-full" // Forgive me, for i have to commit some evilness.
           id="mainlogo"
-          className="max-h-full h-auto"
+          className="max-h-full h-auto max-w-full w-auto"
         />
         <h2
           id="roletext"
@@ -86,6 +123,11 @@ const Showcase = () => {
       </div>
     </div>
   );
+};
+
+Showcase.propTypes = {
+  skipAnim: PropTypes.bool.isRequired,
+  setSkipAnim: PropTypes.func.isRequired,
 };
 
 export default Showcase;
