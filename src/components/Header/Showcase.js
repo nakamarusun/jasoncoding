@@ -5,15 +5,15 @@ import anime from "animejs";
 const Showcase = () => {
   useEffect(() => {
     // Recolor path to white
-    const logoPath = document.querySelectorAll("#mainlogo path");
-    logoPath.forEach((el) => {
+    const $logoPath = document.querySelectorAll("#mainlogo path");
+    $logoPath.forEach((el) => {
       el.style.stroke = "white";
     });
 
     anime
       // Animation for main title card
       .timeline({
-        targets: logoPath,
+        targets: $logoPath,
       })
       .add({
         strokeDashoffset: [anime.setDashoffset, 0],
@@ -33,7 +33,7 @@ const Showcase = () => {
         {
           // Animation for role text
           targets: "#roletext",
-          color: ["rgba(0, 0, 0, 0)", "rgba(255, 255, 255, 1)"],
+          opacity: ["0.0", "1.0"],
           duration: 1,
         },
         "+=800"
@@ -43,6 +43,15 @@ const Showcase = () => {
           targets: ".showcasebutton",
           opacity: ["0.0", "1.0"],
           duration: 1,
+        },
+        "+=800"
+      )
+      .add(
+        {
+          targets: "#idpanel",
+          width: ["0%", "100%"],
+          easing: "easeInOutQuart",
+          duration: 500,
         },
         "+=800"
       );
@@ -58,19 +67,19 @@ const Showcase = () => {
         />
         <h2
           id="roletext"
-          className="mt-1 font-serif text-white text-right w-full text-4xl origin-right scale-x-[60%] "
+          className="opacity-0 mt-1 font-serif text-white text-right w-full text-4xl origin-right scale-x-[60%] "
         >
           {/* COMPUTER SCIENCE STUDENT, FULL-STACK DEVELOPER, DESIGNER */}
           Computer Science Student, Full-Stack Developer, Designer
         </h2>
-        <div className="showcasebutton material-icons text-white animate-bounce mt-[1rem] mb-[-.25rem]">
+        <div className="opacity-0 showcasebutton material-icons text-white animate-bounce mt-[1rem] mb-[-.25rem]">
           adjust
         </div>
         <button
           style={{
             transition: "border-radius 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
           }}
-          className="showcasebutton font-serif border-2 border-gray-50 px-6 pt-1 pb-2 text-xl font-bold text-white rounded-3xl hover:rounded-lg scale-x-[80%] bg-gradient-to-b from-black to-gray-900"
+          className="opacity-0 showcasebutton font-serif border-2 border-gray-50 px-6 pt-1 pb-2 text-xl font-bold text-white rounded-3xl hover:rounded-lg scale-x-[80%] bg-gradient-to-b from-black to-gray-900"
         >
           PROJECT SHOWCASE
         </button>

@@ -9,7 +9,6 @@ const IndexPage = () => {
         <html lang="en" amp />
         <meta charSet="utf-8" />
         <link rel="canonical" href="https://jasoncoding.com" />
-        <base target="_blank" href="https://jasoncoding.com/" />
         <meta
           name="description"
           content="Jasoncoding website. My portfolio site"
