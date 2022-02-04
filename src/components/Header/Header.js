@@ -1,23 +1,19 @@
 import React, { useState } from "react";
+import Identity from "./Identity";
 import Showcase from "./Showcase";
 
 const Header = () => {
   const [skipAnim, setSkipAnim] = useState(false);
 
   return (
-    <div className="w-full h-screen flex flex-col-reverse md:flex-row">
+    <div className="w-full h-screen flex flex-col md:flex-row">
       <Showcase
         skipAnim={skipAnim}
         setSkipAnim={() => {
           setSkipAnim(true);
         }}
       />
-      <div
-        id="idpanel"
-        className="bg-gray-100 h-[0%] md:w-[0%] overflow-hidden"
-      >
-        Coming soon :D
-      </div>
+      <Identity />
     </div>
   );
 };

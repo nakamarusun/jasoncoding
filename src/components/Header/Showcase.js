@@ -86,7 +86,7 @@ const Showcase = ({ skipAnim, setSkipAnim }) => {
         "+=800"
       );
   }, []);
-  // TODO: Responsive phone not perfect 50%
+
   return (
     <div className="relative w-full h-full flex flex-row justify-center bg-black">
       <h5
