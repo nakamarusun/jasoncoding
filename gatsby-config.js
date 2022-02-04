@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: `Jasoncoding`,
-    siteUrl: `https://www.yourdomain.tld`,
+    siteUrl: `https://jasoncoding.com`,
   },
   plugins: [
     "gatsby-plugin-image",
@@ -10,6 +10,7 @@ module.exports = {
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
     "gatsby-plugin-postcss",
+    "gatsby-plugin-fontawesome-css",
     {
       resolve: "gatsby-source-filesystem",
       options: {
