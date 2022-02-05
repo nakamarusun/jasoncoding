@@ -27,5 +27,17 @@ module.exports = {
         },
       },
     },
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: "Jasoncoding",
+        short_name: "Jasoncoding",
+        start_url: "/",
+        background_color: "#e5e7eb",
+        theme_color: "#7e22ce",
+        display: "standalone",
+        icon: "src/images/icon.svg",
+      },
+    },
   ],
 };

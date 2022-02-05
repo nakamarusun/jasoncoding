@@ -1,0 +1,12 @@
+#idpanel {
+  background-color: #f4f4f4;
+  opacity: 1;
+  background-size: 11px 11px;
+  background-image: repeating-linear-gradient(
+    45deg,
+    #cfcfdb 0,
+    #cfcfdb 1.1px,
+    #e5e7eb 0,
+    #e5e7eb 50%
+  );
+}
