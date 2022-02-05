@@ -28,10 +28,10 @@ const Identity = () => {
       <div className="h-full bg-gray-200 overflow-hidden flex flex-row justify-center">
         <div className="flex flex-col justify-center items-center h-full max-w-3xl w-5/6 md:w-11/12">
           <div className="mt-4 mb-auto w-full flex flex-row justify-evenly">
-            <h5>Home</h5>
+            {/* <h5>Home</h5>
             <h5>About Me</h5>
             <h5>Projects</h5>
-            <h5>Blog</h5>
+            <h5>Blog</h5> */}
           </div>
           <h2 className="text-gray-600 font-medium text-xl w-full leading-none ml-8 md:ml-0 mt-8 md:mt-0">
             Hello,
@@ -71,7 +71,6 @@ const Identity = () => {
           </p> */}
           <h3 className="w-full font-bold text-lg mt-4 md:mt-8">Skills:</h3>
           <div className="mt-auto w-full">
-            <h2>Get my contact</h2>
             <ContactInfo />
             <div className="w-full flex flex-row justify-evenly mb-6">
               {socials.map(({ icon, link }, i) => (
