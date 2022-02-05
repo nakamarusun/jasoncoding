@@ -10,6 +10,9 @@ module.exports = {
         googgreen: "#0f9d58",
         googyellow: "#fbbc04",
       },
+      transitionDuration: {
+        25: "25ms",
+      },
     },
     fontFamily: {
       sans: ["Zen Maru Gothic", "sans-serif"],

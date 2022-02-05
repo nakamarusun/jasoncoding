@@ -71,7 +71,7 @@ const ContactInfo = ({ className }) => {
       {contactStatus === "idle" ? (
         <>
           <button
-            className="text-center bg-white shadow-md px-3 py-1 rounded-md text-purple-900 hover:bg-gray-300 hover:text-fuchsia-700"
+            className="transition-colors duration-25 text-center bg-white shadow-md px-3 py-1 rounded-md text-purple-900 hover:bg-gray-100 hover:text-fuchsia-700"
             onClick={handleReCaptchaVerify}
           >
             <span className="material-icons align-bottom mr-2">
@@ -126,7 +126,7 @@ const ContactInfo = ({ className }) => {
                       {Object.entries(contact.data).map(([key, val], i) => (
                         <h3 key={i}>
                           <span className="font-medium text-gray-700">
-                            {key}:&nbsp;
+                            {key.charAt(0).toUpperCase() + key.slice(1)}:&nbsp;
                           </span>
                           {val}
                         </h3>

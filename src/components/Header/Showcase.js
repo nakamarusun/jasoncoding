@@ -92,11 +92,11 @@ const Showcase = ({ skipAnim, setSkipAnim }) => {
       <h5
         id="skipanimbtn"
         onClick={setSkipAnim}
-        className="absolute text-white font-bold top-4 left-4 text-center underline cursor-pointer select-none"
+        className="absolute text-white z-50 font-bold top-[0.625rem] right-4 text-center underline cursor-pointer select-none"
       >
         Skip animation.
       </h5>
-      <div className="py-4 max-w-3xl w-11/12 flex flex-col justify-center items-center">
+      <div className="mt-12 md:mt-0 py-4 max-w-3xl w-11/12 flex flex-col justify-center items-center">
         <Logo
           // // className="max-h-[50%] h-full" // Forgive me, for i have to commit some evilness.
           id="mainlogo"
