@@ -21,7 +21,7 @@ const Sidebar = ({ className }) => {
       </div>
       {open && (
         <div
-          className="inset-0 bg-black bg-opacity-50 fixed z-20"
+          className="md:hidden inset-0 bg-black bg-opacity-50 fixed z-20"
           onClick={() => {
             setOpen(false);
           }}
