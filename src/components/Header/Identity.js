@@ -6,7 +6,7 @@ import {
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
 import ContactInfo from "./ContactInfo";
-import "./identity.css";
+import "./Identity.css";
 
 const socials = [
   {
