@@ -92,7 +92,7 @@ const Showcase = ({ skipAnim, setSkipAnim }) => {
       <h5
         id="skipanimbtn"
         onClick={setSkipAnim}
-        className="absolute text-white font-bold bottom-4 left-4 text-center underline cursor-pointer select-none"
+        className="absolute text-white font-bold top-4 left-4 text-center underline cursor-pointer select-none"
       >
         Skip animation.
       </h5>

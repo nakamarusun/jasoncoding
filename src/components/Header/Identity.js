@@ -5,6 +5,7 @@ import {
   faLinkedin,
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
+import ContactInfo from "./ContactInfo";
 
 const socials = [
   {
@@ -51,7 +52,7 @@ const Identity = () => {
             Thank you for stopping by my site!
           </p>
           <p className="mt-2 w-full text-justify">
-            I am a developer from 🇮🇩 highly motivated to
+            I am an 🇮🇩 developer highly motivated to
             <span className="font-black"> give my best</span>, improve myself to
             be a better person, and complete my works to a high standard. I am
             flexible, open to new ideas, and constantly looking at how to solve
@@ -71,6 +72,7 @@ const Identity = () => {
           <h3 className="w-full font-bold text-lg mt-4 md:mt-8">Skills:</h3>
           <div className="mt-auto w-full">
             <h2>Get my contact</h2>
+            <ContactInfo />
             <div className="w-full flex flex-row justify-evenly mb-6">
               {socials.map(({ icon, link }, i) => (
                 <a target="_blank" href={link} key={i} rel="noreferrer">

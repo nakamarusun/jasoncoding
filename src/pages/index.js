@@ -1,10 +1,14 @@
 import * as React from "react";
 import Header from "../components/Header/Header";
 import { Helmet } from "react-helmet";
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 
 const IndexPage = () => {
   return (
-    <div>
+    <GoogleReCaptchaProvider
+      reCaptchaKey="6LdGuFkeAAAAAFJRKFLPVB5Cd51jY0R1GKpsCZnL"
+      scriptProps={{ defer: true }}
+    >
       <Helmet titleTemplate="Jasoncoding - %s" defaultTitle="Jasoncoding">
         <html lang="en" amp />
         <meta charSet="utf-8" />
@@ -15,7 +19,7 @@ const IndexPage = () => {
         />
       </Helmet>
       <Header />
-    </div>
+    </GoogleReCaptchaProvider>
   );
 };
 
