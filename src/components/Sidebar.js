@@ -19,6 +19,14 @@ const Sidebar = ({ className }) => {
           {open ? "close" : "menu"}
         </div>
       </div>
+      {open && (
+        <div
+          className="inset-0 bg-black bg-opacity-50 fixed z-20"
+          onClick={() => {
+            setOpen(false);
+          }}
+        />
+      )}
       <div
         className={`md:hidden flex flex-col overflow-x-hidden whitespace-nowrap fixed inset-y-0 mt-12 z-30 bottom-0 left-0 bg-gray-900 transition-[width] ${
           open ? "w-48" : "w-0"
