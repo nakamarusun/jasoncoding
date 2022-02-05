@@ -116,6 +116,9 @@ const Showcase = ({ skipAnim, setSkipAnim }) => {
             transition: "border-radius 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
           }}
           className="opacity-0 showcasebutton font-serif border-2 border-gray-50 px-6 pt-1 pb-2 text-md md:text-xl font-bold text-white rounded-3xl hover:rounded-lg scale-x-[80%] bg-gradient-to-b from-black to-gray-900"
+          onClick={() => {
+            alert("Coming Soon!");
+          }}
         >
           PROJECT SHOWCASE
         </button>
