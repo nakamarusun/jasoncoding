@@ -24,7 +24,7 @@ const IndexPage = () => {
         <meta property="og:type" content="website" />
         <meta
           property="og:title"
-          content="Jasoncoding - 🇮🇩 Full Stack Engineer + Designer"
+          content="Jasoncoding - Full Stack Engineer + Designer"
         />
         <meta
           property="og:description"
@@ -37,7 +37,7 @@ const IndexPage = () => {
         <meta property="twitter:url" content="https://jasoncoding.com/" />
         <meta
           name="twitter:title"
-          content="Jasoncoding - 🇮🇩 Full Stack Engineer + Designer"
+          content="Jasoncoding - Full Stack Engineer + Designer"
         />
         <meta
           name="twitter:description"

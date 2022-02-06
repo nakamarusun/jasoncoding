@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg fill-opacity=".8" stroke="#777" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+<path d="m63,1a63,63 0 1,0 2,0zm0,14a49,49 0 1,0 2,0zm0,14a35,35 0 1,0 2,0zm0,14a21,21 0 1,0 2,0zm0,14a7,7 0 1,0 2,0zm64,7H1m108-45-90,90m90,0-90-90m45-18v126" fill="#FFF"/>
+<path d="m50 8-20 10 68 92 10-10-44-36z" fill="#F60"/>
+<path d="m17 50v28l47-14z" fill="#FC0"/>
+<path d="m64,64 6,35H58z" fill="#7F7"/>
+<path d="m64 64 13-40 9 5z" fill="#CF3"/>
+<path d="m64 64 14-6 1 4zl-26 13 3 4z" fill="#04F"/>
+</svg>

@@ -71,7 +71,7 @@ const ContactInfo = ({ className }) => {
       {contactStatus === "idle" ? (
         <>
           <button
-            className="transition-colors duration-25 text-center bg-white shadow-md px-3 py-1 rounded-md text-purple-900 hover:bg-gray-100 hover:text-fuchsia-700"
+            className="transition-colors duration-75 text-center px-3 py-1 rounded-md text-purple-900 shadow-nm-sm bg-gray-200 hover:bg-nm-up active:bg-nm-down hover:text-fuchsia-700"
             onClick={handleReCaptchaVerify}
           >
             <span className="material-icons align-bottom mr-2">
@@ -100,7 +100,7 @@ const ContactInfo = ({ className }) => {
           )}
         </>
       ) : (
-        <div className="bg-white shadow-md rounded-lg px-3 py-0.5 flex flex-row items-center">
+        <div className="shadow-nm-sm-inset bg-gray-200 rounded-lg px-4 py-2 flex flex-row items-center">
           {(() => {
             switch (contactStatus) {
               case "getting":

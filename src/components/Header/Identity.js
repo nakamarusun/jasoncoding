@@ -6,7 +6,8 @@ import {
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
 import ContactInfo from "./ContactInfo";
-import "./Identity.css";
+import Skills from "./Skills";
+// import "./Identity.css";
 import { menus } from "../../menu";
 
 const socials = [
@@ -24,31 +25,32 @@ const socials = [
   },
 ];
 
+// TODO: Add background
 const Identity = () => {
   return (
-    <div id="idpanel" className="h-[0%] md:w-[0%]">
+    <div id="idpanel" className="h-[0%] md:w-[0%] bg-gray-200">
       <div className="h-full overflow-hidden flex flex-row justify-center">
         <div className="flex flex-col justify-center items-center h-full max-w-3xl w-5/6 md:w-11/12">
           <div className="flex-1 flex flex-col justify-center md:mt-16">
             <h2 className="text-gray-600 font-medium text-xl w-full leading-none ml-8 md:ml-0 mt-8 md:mt-0">
               Hello,
             </h2>
-            <h1 className="text-4xl font-black w-full ml-8 md:ml-0">
+            <h1 className="text-4xl font-black text-gray-700 w-full ml-8 md:ml-0">
               I&apos;m&nbsp;
               <span className="group relative">
                 <span className="absolute text-sm text-gray-800 w-full text-center ease-out duration-200 opacity-0 group-hover:opacity-100">
                   Call me
                 </span>
-                <span className="text-purple-700 ease-out duration-200 group-hover:translate-y-2 inline-block">
+                <span className="text-purple-700 ease-out duration-75 group-hover:translate-y-2 inline-block">
                   Jason&nbsp;
                 </span>
               </span>
               Christian.
             </h1>
-            <p className="mt-4 md:mt-8 w-full">
+            <p className="mt-4 md:mt-8 w-full text-gray-700">
               Thank you for stopping by my site!
             </p>
-            <p className="mt-2 w-full text-justify">
+            <p className="mt-2 w-full text-justify text-gray-800">
               I am an 🇮🇩 developer highly motivated to
               <span className="font-black"> give my best</span>, improve myself
               to be a better person, and complete my works to a high standard. I
@@ -66,14 +68,17 @@ const Identity = () => {
               I have freelance experience in Tutoring, Wordpress, and ReactJS with
               Redux.
             </p> */}
-            <h3 className="w-full font-bold text-lg mt-4 md:mt-8">Skills:</h3>
-            <ContactInfo className="mt-4" />
+            <h3 className="w-full font-bold text-lg mt-4 md:mt-8 text-gray-800 mb-2">
+              Skills:
+            </h3>
+            <Skills className="w-full bg-gray-200rounded-lg flex flex-row flex-wrap space-x-1 space-y-1" />
+            <ContactInfo className="mt-6" />
           </div>
           <div className="w-full">
             <div className="hidden mb-5 w-full md:flex flex-row justify-evenly">
               {menus.map(({ name, url }, i) => (
                 <a
-                  className="bg-white rounded-md px-3 py-0.5 shadow-md text-sm font-medium transition-colors duration-25 underline decoration-transparent hover:bg-gray-100 hover:decoration-gray-500"
+                  className="bg-gray-200 rounded-md px-3 py-0.5 shadow-nm-xs text-sm font-medium transition-colors duration-25 underline decoration-transparent hover:bg-nm-up active:bg-nm-down hover:decoration-gray-500"
                   key={i}
                   href={url}
                 >
