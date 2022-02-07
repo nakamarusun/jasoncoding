@@ -47,10 +47,10 @@ const Identity = () => {
               </span>
               Christian.
             </h1>
-            <p className="mt-4 md:mt-8 w-full text-gray-700">
+            <p className="mt-4 md:mt-8 w-full text-black">
               Thank you for stopping by my site!
             </p>
-            <p className="mt-2 w-full text-justify text-gray-800">
+            <p className="mt-2 w-full text-justify text-black">
               I am an 🇮🇩 developer highly motivated to
               <span className="font-black"> give my best</span>, improve myself
               to be a better person, and complete my works to a high standard. I

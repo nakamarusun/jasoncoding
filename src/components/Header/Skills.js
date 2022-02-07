@@ -11,7 +11,7 @@ const Skills = ({ className }) => {
         return (
           <div className="group" key={i}>
             <InSvg className="h-8 w-8 transition-transform duration-100 hover:scale-125" />
-            <div className="bg-white px-2 py-0.5 rounded-md -translate-y-16 absolute hidden group-hover:block">
+            <div className="bg-white -translate-x-[25%] px-2 py-0.5 rounded-md -translate-y-16 absolute hidden group-hover:block">
               {name}
             </div>
           </div>

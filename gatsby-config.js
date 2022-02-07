@@ -4,6 +4,17 @@ module.exports = {
     siteUrl: `https://jasoncoding.com`,
   },
   plugins: [
+    {
+      resolve: "gatsby-plugin-react-svg",
+      options: {
+        rule: {
+          include: /\.inline\.svg/,
+          options: {
+            classIdPrefix: true, // This does not work. Check out src/images/ltechs/scrubber.sh
+          },
+        },
+      },
+    },
     "gatsby-plugin-image",
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-sitemap",
@@ -18,14 +29,6 @@ module.exports = {
         path: "./src/images/",
       },
       __key: "images",
-    },
-    {
-      resolve: "gatsby-plugin-react-svg",
-      options: {
-        rule: {
-          include: /\.inline\.svg/,
-        },
-      },
     },
     {
       resolve: `gatsby-plugin-manifest`,
