@@ -117,7 +117,9 @@ const Showcase = ({ skipAnim, setSkipAnim }) => {
           }}
           className="opacity-0 showcasebutton font-serif border-2 border-gray-50 px-6 pt-1 pb-2 text-md md:text-xl font-bold text-white rounded-3xl hover:rounded-lg scale-x-[80%] bg-gradient-to-b from-black to-gray-900"
           onClick={() => {
-            alert("Coming Soon!");
+            alert(
+              "Coming Soon! In the meantime, check out my GitHub page: https://github.com/nakamarusun. Also check out the demo we did in Google Solution Challenge here: https://www.youtube.com/watch?v=zBzN8zYclQo&list=PLOU2XLYxmsIK3Mq1itovZMQkKEkBYamG0&index=13"
+            );
           }}
         >
           PROJECT SHOWCASE

@@ -107,7 +107,7 @@
        xlink:href="#linearGradient2963"
        id="radialGradient2957"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.55688261,0.74085798,-0.54858014,0.47513435,85.521004,-28.189699)"
+       gradientTransform="matrix(0.55688261,0.74085798,-0.54858014,0.47513435,91.812226,-13.590464)"
        cx="123.46404"
        cy="119.21364"
        fx="95.794449"
@@ -142,8 +142,8 @@
      units="px"
      inkscape:window-width="1786"
      inkscape:window-height="798"
-     inkscape:window-x="339"
-     inkscape:window-y="137"
+     inkscape:window-x="268"
+     inkscape:window-y="119"
      inkscape:window-maximized="0"
      inkscape:pagecheckerboard="0" />
   <metadata
@@ -173,7 +173,7 @@
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
     <ellipse
-       style="opacity:0.72115385;fill:url(#radialGradient2861-1);fill-opacity:1;fill-rule:nonzero;stroke-width:0.361332"
+       style="opacity:0.39423077;fill:url(#radialGradient2861-1);fill-opacity:1;fill-rule:nonzero;stroke-width:0.361332"
        id="path910-6"
        cx="20.094748"
        cy="123.51721"
@@ -183,10 +183,10 @@
     <ellipse
        ry="94.170441"
        rx="97.605232"
-       cy="118.6748"
-       cx="90.039726"
+       cy="133.27403"
+       cx="96.330948"
        id="path910"
-       style="opacity:0.81730769;fill:url(#radialGradient2957);fill-opacity:1;fill-rule:nonzero;stroke-width:0.291985"
+       style="opacity:0.24679487;fill:url(#radialGradient2957);fill-opacity:1;fill-rule:nonzero;stroke-width:0.291985"
        transform="rotate(-39.537746)" />
     <g
        inkscape:label="Layer 1"

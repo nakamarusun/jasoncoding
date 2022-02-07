@@ -128,7 +128,7 @@ const ContactInfo = ({ className }) => {
                           <span className="font-medium text-gray-700">
                             {key.charAt(0).toUpperCase() + key.slice(1)}:&nbsp;
                           </span>
-                          {val}
+                          <span className="select-all">{val}</span>
                         </h3>
                       ))}
                     </div>
