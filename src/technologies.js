@@ -54,6 +54,8 @@ import Unity from "./images/techs/unity.inline.svg";
 import Webpack from "./images/techs/webpack.inline.svg";
 import Webrtc from "./images/techs/webrtc.inline.svg";
 import Wordpress from "./images/techs/wordpress.inline.svg";
+import Tableau from "./images/techs/tableau.inline.svg";
+import Go from "./images/techs/go.inline.svg";
 
 // Thanks SVG Repo
 export const techs = [
@@ -156,6 +158,11 @@ export const techs = [
     name: "Game Maker Studio",
     img: GameMakerStudio,
     category: "Game Development",
+  },
+  {
+    name: "Go",
+    img: Go,
+    category: "Backend",
   },
   {
     name: "Google Cloud",
@@ -336,5 +343,10 @@ export const techs = [
     name: "Wordpress",
     img: Wordpress,
     category: "Frontend",
+  },
+  {
+    name: "Tableau",
+    img: Tableau,
+    category: "Machine Learning",
   },
 ];

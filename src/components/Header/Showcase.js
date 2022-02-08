@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import Logo from "../../images/logo.inline.svg";
 import anime from "animejs";
 import PropTypes from "prop-types";
+import { Link } from "gatsby";
 
 const Showcase = ({ skipAnim, setSkipAnim }) => {
   // We have to use a reference so that it's not lost in the anime context
@@ -106,7 +107,8 @@ const Showcase = ({ skipAnim, setSkipAnim }) => {
           id="roletext"
           className="leading-none md:leading-none opacity-0 my-3 font-serif text-white w-full text-right text-md md:text-lg space origin-right scale-y-[175%]"
         >
-          Computer Science Student, Full-Stack Developer, Designer
+          Computer Science Student, Web Developer, Full-Stack Developer,
+          Designer
         </h2>
         <div className="opacity-0 showcasebutton material-icons text-white animate-bounce mt-[1rem] mb-[-.25rem]">
           adjust
@@ -122,7 +124,7 @@ const Showcase = ({ skipAnim, setSkipAnim }) => {
             );
           }}
         >
-          PROJECT SHOWCASE
+          <Link to="/showcase">PROJECT SHOWCASE</Link>
         </button>
       </div>
     </div>
