@@ -3,7 +3,7 @@ import Header from "../components/Header/Header";
 import { Helmet } from "react-helmet";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import Sidebar from "../components/Sidebar";
-import splash from "../images/splash.webp";
+import splash from "../images/splash.jpg";
 
 const IndexPage = () => {
   return (
