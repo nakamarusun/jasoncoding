@@ -124,7 +124,8 @@ const Showcase = ({ skipAnim, setSkipAnim }) => {
             );
           }}
         >
-          <Link to="/showcase">PROJECT SHOWCASE</Link>
+          {/* <Link to="/showcase">PROJECT SHOWCASE</Link> */}
+          PROJECT SHOWCASE
         </button>
       </div>
     </div>

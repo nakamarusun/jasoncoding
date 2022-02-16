@@ -1,7 +1,7 @@
 import React from "react";
 
 const showcase = () => {
-  return <div>yes</div>;
+  return <div>Coming Soon!</div>;
 };
 
 export default showcase;

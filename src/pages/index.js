@@ -30,7 +30,8 @@ const IndexPage = () => {
           property="og:description"
           content="Hello! My name is Jason Christian Hailianto. This is my portfolio and blogging website about my projects and whatever else that i want to post."
         />
-        <meta property="og:image" content={splash} />
+        <meta name="image" property="og:image" content={splash} />
+        <meta name="author" content="Jason Christian" />
         {/* Twitter graphs */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="twitter:domain" content="jasoncoding.com" />
