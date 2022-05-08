@@ -2,24 +2,37 @@ package config
 
 import (
 	"log"
-
 	"github.com/spf13/viper"
-	"jasoncoding.com/backendv2/utils"
 )
 
 var config *viper.Viper
 
-func Init() {
-	env := utils.GetEnvDefault("ENVIRONMENT", "development")
+// All the necessary variables for this program
+var necessaryVariables = []string{
+	"GCAPTCHA_SECRET",
+	"CONTACT",
+}
 
-	config = viper.New()
-	config.SetConfigType("env")
-	config.SetConfigName(env)
-	config.AddConfigPath(".")
+func checkRequiredVars(config *viper.Viper) {
+	// Store all the unloaded variables string
+	unloaded := make([]string, 0, len(necessaryVariables))
 
-	if err := config.ReadInConfig(); err != nil {
-		log.Fatalf("Error loading configuration file '%s' (%v)", env, err)
+	for _, vars := range necessaryVariables {
+		if config.Get(vars) == nil {
+			unloaded = append(unloaded, vars)
+		}
 	}
+
+	if len(unloaded) != 0 {
+		log.Fatalf("Cannot start program! These variables are not set (Lack %d): %v", len(unloaded), unloaded)
+	}
+}
+
+func Init() {
+	config = viper.New()
+	config.SetDefault("PORT", 8080)
+	config.AutomaticEnv()
+	checkRequiredVars(config)
 }
 
 func GetConfig() *viper.Viper {

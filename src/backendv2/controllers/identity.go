@@ -63,6 +63,6 @@ func GetIdentity(c *gin.Context) {
 		return
 	}
 
-	// Send the file
-	c.File("./mycontact.json")
+	// Send the contact
+	c.Data(200, "application/json", []byte(cfg.GetString("CONTACT")))
 }
