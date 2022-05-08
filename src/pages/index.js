@@ -11,13 +11,16 @@ const IndexPage = () => {
       reCaptchaKey="6LdGuFkeAAAAAFJRKFLPVB5Cd51jY0R1GKpsCZnL"
       scriptProps={{ defer: true, async: true }}
     >
-      <Helmet titleTemplate="Jasoncoding - %s" defaultTitle="Jasoncoding">
+      <Helmet
+        titleTemplate="Jasoncoding - %s"
+        defaultTitle="Jasoncoding - Full Stack Engineer + Designer"
+      >
         <html lang="en" amp />
         <meta charSet="utf-8" />
         <link rel="canonical" href="https://jasoncoding.com" />
         <meta
           name="description"
-          content="Jasoncoding. Jason Christian Hailianto programming and development portfolio website"
+          content="Jason Christian H. - Developer, Designer, Computer Engineer. Welcome to my blog and portfolio."
         />
         {/* Og graphs */}
         <meta property="og:url" content="https://jasoncoding.com/" />
@@ -28,7 +31,7 @@ const IndexPage = () => {
         />
         <meta
           property="og:description"
-          content="Hello! My name is Jason Christian Hailianto. This is my portfolio and blogging website about my projects and whatever else that i want to post."
+          content="Hello! My name is Jason Christian Hailianto. This is my portfolio and blogging website about my projects and everything else."
         />
         <meta name="image" property="og:image" content={splash} />
         <meta name="author" content="Jason Christian" />
@@ -42,7 +45,7 @@ const IndexPage = () => {
         />
         <meta
           name="twitter:description"
-          content="Hello! My name is Jason Christian Hailianto. This is my portfolio and blogging website about my projects and whatever else that i want to post."
+          content="Hello! My name is Jason Christian Hailianto. This is my portfolio and blogging website about my projects and everything else."
         />
         <meta name="twitter:image" content={splash} />
       </Helmet>
