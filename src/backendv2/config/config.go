@@ -30,6 +30,7 @@ func checkRequiredVars(config *viper.Viper) {
 
 func Init() {
 	config = viper.New()
+	config.SetDefault("ENVIRONMENT", "development")
 	config.SetDefault("PORT", 8080)
 	config.AutomaticEnv()
 	checkRequiredVars(config)

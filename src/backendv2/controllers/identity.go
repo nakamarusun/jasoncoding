@@ -30,6 +30,7 @@ func GetIdentity(c *gin.Context) {
 			"success": false,
 			"error":   err,
 		})
+		return
 	}
 
 	params := fmt.Sprintf("?secret=%s&response=%s", cfg.GetString("GCAPTCHA_SECRET"), reqBody.Response)

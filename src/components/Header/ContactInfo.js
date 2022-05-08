@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import PropTypes from "prop-types";
+import { API_ROOT } from "../../constants";
 
 const ContactInfo = ({ className }) => {
   // Google recaptcha hook
@@ -35,7 +36,7 @@ const ContactInfo = ({ className }) => {
     // Asks the backend for our contact
     try {
       const res = await (
-        await fetch("https://jasoncoding.com/api/getcontact", {
+        await fetch(API_ROOT + "/getcontact", {
           method: "POST",
           headers: {
             Accept: "application/json",
