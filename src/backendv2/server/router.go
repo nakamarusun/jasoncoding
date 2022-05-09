@@ -1,10 +1,10 @@
 package server
 
 import (
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"jasoncoding.com/backendv2/controllers"
 	"jasoncoding.com/backendv2/config"
+	cors "github.com/rs/cors/wrapper/gin"
 )
 
 // These routes are only available for the main jasoncoding website
@@ -13,11 +13,9 @@ func websiteRoutes(router *gin.Engine) {
 
 	// Override and cors in dev
 	if config.GetConfig().GetString("ENVIRONMENT") == "production" {
-		corsConfig := cors.DefaultConfig()
-		corsConfig.AllowOrigins = []string{"https://jasoncoding.com"}
-		webGroup.Use(cors.New(corsConfig))
-	} else {
-		webGroup.Use(cors.Default())
+		webGroup.Use(cors.New(cors.Options{
+			AllowedOrigins: []string{"https://jasoncoding.com"},
+		}))
 	}
 
 	webGroup.GET("/ping", func(c *gin.Context) {
@@ -31,13 +29,23 @@ func websiteRoutes(router *gin.Engine) {
 // These routes are available for public usage
 func publicRoutes(router *gin.Engine) {
 	pubGroup := router.Group("/api")
-	// https://stackoverflow.com/a/56348408/12709867
-	pubGroup.Use(cors.Default())
 	// ? Place routers down down here if you want public APIs
-
+	pubGroup.GET("/pong", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "ping",
+		})
+	})
 }
 
 func RegisterRoutes(router *gin.Engine) {
+	router.Use(cors.New(cors.Options{
+		AllowCredentials: true,
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "HEAD", "OPTIONS"},
+		OptionsPassthrough: true,
+		Debug: true,
+	}))
+
 	websiteRoutes(router);
 	publicRoutes(router);
 }
