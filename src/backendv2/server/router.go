@@ -2,9 +2,9 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"jasoncoding.com/backendv2/controllers"
-	"jasoncoding.com/backendv2/config"
 	cors "github.com/rs/cors/wrapper/gin"
+	"jasoncoding.com/backendv2/config"
+	"jasoncoding.com/backendv2/controllers"
 )
 
 // These routes are only available for the main jasoncoding website
@@ -23,7 +23,9 @@ func websiteRoutes(router *gin.Engine) {
 			"message": "pong",
 		})
 	})
+
 	webGroup.POST("/getcontact", controllers.GetIdentity)
+	webGroup.GET("/challenge", controllers.GetCoolChallenge)
 }
 
 // These routes are available for public usage
@@ -39,13 +41,13 @@ func publicRoutes(router *gin.Engine) {
 
 func RegisterRoutes(router *gin.Engine) {
 	router.Use(cors.New(cors.Options{
-		AllowCredentials: true,
-		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"GET", "POST", "HEAD", "OPTIONS"},
+		AllowCredentials:   true,
+		AllowedOrigins:     []string{"*"},
+		AllowedMethods:     []string{"GET", "POST", "HEAD", "OPTIONS"},
 		OptionsPassthrough: true,
-		Debug: true,
+		Debug:              true,
 	}))
 
-	websiteRoutes(router);
-	publicRoutes(router);
+	websiteRoutes(router)
+	publicRoutes(router)
 }

@@ -26,9 +26,8 @@ func GetIdentity(c *gin.Context) {
 	var reqBody getContact
 
 	if err := c.ShouldBindJSON(&reqBody); err != nil {
-		c.JSON(400, gin.H{
-			"success": false,
-			"error":   err,
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
 		})
 		return
 	}
@@ -40,9 +39,8 @@ func GetIdentity(c *gin.Context) {
 
 	// Handle error
 	if err != nil {
-		c.JSON(500, gin.H{
-			"success": false,
-			"error":   err,
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err,
 		})
 		return
 	}
@@ -50,20 +48,17 @@ func GetIdentity(c *gin.Context) {
 	defer res.Body.Close()
 
 	// Read body
-	// var body gin.H
-	// var bodyRaw []byte
 	var body gRecaptchaRes
 	json.NewDecoder(res.Body).Decode(&body)
 
 	// Do some checking
 	if !body.Success || body.Action != "getcontact" || body.Score < 0.5 {
-		c.JSON(401, gin.H{
-			"success": false,
-			"error":   "",
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "Bot Detected.",
 		})
 		return
 	}
 
 	// Send the contact
-	c.Data(200, "application/json", []byte(cfg.GetString("CONTACT")))
+	c.Data(http.StatusOK, "application/json", []byte(cfg.GetString("CONTACT")))
 }
