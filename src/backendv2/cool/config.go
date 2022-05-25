@@ -7,8 +7,8 @@ type CoolOptions struct {
 	ImgFormat string
 	Colors    []string
 	Quality   string
-	W int
-	H int
+	W         int
+	H         int
 }
 
 func New() CoolOptions {
@@ -28,7 +28,7 @@ func New() CoolOptions {
 			"again",
 		},
 		ImgFormat: "jpg",
-		Quality:   "30%",
+		Quality:   "60%",
 
 		// Protanopia and deuteranopia color blindness safe palette
 		// https://www.nature.com/articles/nmeth.1618

@@ -1,6 +1,7 @@
 package cool
 
 import (
+	"fmt"
 	"io"
 	"math/rand"
 	"mime"
@@ -32,7 +33,9 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 		strconv.Itoa(cfg.W) + "x" + strconv.Itoa(cfg.H),
 		"xc:white",
 		"-quality",
-		cfg.Quality}
+		cfg.Quality,
+		"-gravity",
+		"center"}
 
 	challenges := make([]QuestionAnswer, 0, answerNum)
 
@@ -66,14 +69,19 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 						j++
 					}
 				}
+
+				rot := rand.Intn(90) - 45
+				x := rand.Intn(cfg.W*2) - cfg.W*4
+				y := rand.Intn(cfg.H/2) - cfg.H/4
+
 				// Generate command
 				command = append(command,
 					"-fill",
 					color,
 					"-pointsize",
-					strconv.Itoa(rand.Intn(50)+50),
+					strconv.Itoa(rand.Intn(50)+40),
 					"-annotate",
-					"0x0+0+60",
+					fmt.Sprintf("%dx%d+%d+%d", rot, rot, x, y),
 					word,
 				)
 				break
