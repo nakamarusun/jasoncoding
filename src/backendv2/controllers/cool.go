@@ -8,7 +8,7 @@ import (
 )
 
 func GetCoolChallenge(c *gin.Context) {
-	res, err := cool.GenCaptcha()
+	res, err := cool.GenCaptcha(3, 2)
 
 	if err != nil {
 		c.JSON(500, gin.H{
@@ -22,7 +22,8 @@ func GetCoolChallenge(c *gin.Context) {
 
 	// Set headers
 	c.Status(200)
-	c.Header("Content-Type", "image/jpeg")
+	c.Header("Content-Type", res.Format)
+	c.Header("X-Cool", "das")
 
 	// Send captcha as stream
 	c.Stream(func(w io.Writer) bool {
