@@ -35,7 +35,7 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 		"-quality",
 		cfg.Quality,
 		"-gravity",
-		"center"}
+		"West"}
 
 	challenges := make([]QuestionAnswer, 0, answerNum)
 
@@ -71,8 +71,8 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 				}
 
 				rot := rand.Intn(90) - 45
-				x := rand.Intn(cfg.W*2) - cfg.W*4
-				y := rand.Intn(cfg.H/2) - cfg.H/4
+				x := rand.Intn(cfg.W * 7 / 10)
+				y := rand.Intn(cfg.H/3) - cfg.H/6
 
 				// Generate command
 				command = append(command,
