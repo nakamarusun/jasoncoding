@@ -2,6 +2,9 @@ package config
 
 import (
 	"log"
+	"os"
+	"path"
+
 	"github.com/spf13/viper"
 )
 
@@ -31,6 +34,11 @@ func checkRequiredVars(config *viper.Viper) {
 
 func Init() {
 	Cfg = viper.New()
+	cwd, err := os.Getwd()
+	if err == nil {
+		Cfg.SetDefault("FONT_PATH", path.Join(cwd, "/fonts"))
+	}
+
 	Cfg.SetDefault("ENVIRONMENT", "development")
 	Cfg.SetDefault("PORT", 8080)
 	Cfg.AutomaticEnv()

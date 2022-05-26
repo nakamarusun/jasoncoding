@@ -52,6 +52,8 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 	}
 	slices.Sort(ansIdx)
 
+	usefont := len(cfg.FontList) >= 0
+
 	// Generates the command and the answers
 	words := make([]string, 0, wrongNum+answerNum)
 	j := 0
@@ -71,9 +73,16 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 					}
 				}
 
-				rot := rand.Intn(90) - 45
+				rot := rand.Intn(80) - 40
 				x := rand.Intn(cfg.W * 7 / 10)
 				y := rand.Intn(cfg.H/3) - cfg.H/6
+
+				if usefont {
+					command = append(command,
+						"-font",
+						cfg.FontList[rand.Intn(len(cfg.FontList))],
+					)
+				}
 
 				// Generate command
 				command = append(command,

@@ -1,0 +1,1 @@
+Store fonts you want to use in CoolCaptcha generator here

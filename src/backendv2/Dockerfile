@@ -22,6 +22,10 @@ WORKDIR /app
 # Copy from the first build
 COPY --from=0 /app/jcbackendv2 ./
 
+# Copy fonts
+COPY ./cool/fonts ./fonts
+ENV FONT_PATH=/app/fonts
+
 ENV ENVIRONMENT=production
 ENV GIN_MODE=release
 
