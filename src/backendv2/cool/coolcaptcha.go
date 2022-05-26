@@ -23,6 +23,7 @@ type Result struct {
 	Reader    io.ReadCloser    // Read the file here
 	Challenge []QuestionAnswer // Question answer pack
 	Format    string           // Image format
+	Choices   []string         // Choices to question
 }
 
 // Generates a new captcha file and contains the answer
@@ -105,6 +106,7 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 		Reader:    stdout,
 		Challenge: challenges,
 		Format:    mime.TypeByExtension("." + cfg.ImgFormat),
+		Choices:   cfg.Colors,
 	}, nil
 }
 

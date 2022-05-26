@@ -5,6 +5,7 @@ import (
 	cors "github.com/rs/cors/wrapper/gin"
 	"jasoncoding.com/backendv2/config"
 	"jasoncoding.com/backendv2/controllers"
+	"jasoncoding.com/backendv2/cool"
 )
 
 // These routes are only available for the main jasoncoding website
@@ -24,8 +25,8 @@ func websiteRoutes(router *gin.Engine) {
 		})
 	})
 
-	webGroup.POST("/getcontact", controllers.GetIdentity)
-	webGroup.GET("/challenge", controllers.GetCoolChallenge)
+	webGroup.POST("/contact", controllers.VerifyChallenge(cool.ActGetContact), controllers.GetIdentity)
+	webGroup.GET("/challenge/:action", controllers.GetCoolChallenge)
 }
 
 // These routes are available for public usage

@@ -20,7 +20,7 @@ type getContact struct {
 	Response string `json:"response"`
 }
 
-func GetIdentity(c *gin.Context) {
+func GetIdentityGoog(c *gin.Context) {
 
 	cfg := config.GetConfig()
 	var reqBody getContact
@@ -60,5 +60,10 @@ func GetIdentity(c *gin.Context) {
 	}
 
 	// Send the contact
+	c.Data(http.StatusOK, "application/json", []byte(cfg.GetString("CONTACT")))
+}
+
+func GetIdentity(c *gin.Context) {
+	cfg := config.GetConfig()
 	c.Data(http.StatusOK, "application/json", []byte(cfg.GetString("CONTACT")))
 }

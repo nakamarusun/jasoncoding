@@ -4,7 +4,9 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"io"
+	"net/http"
 	"strings"
 	"time"
 
@@ -14,12 +16,24 @@ import (
 )
 
 type CoolJwtClaim struct {
-	Cool   string `json:"cool"`
-	Action string `json:"action"`
+	Cool    string   `json:"cool"`
+	Action  string   `json:"action"`
+	Choices []string `json:"choices"`
 	jwt.StandardClaims
 }
 
+type Answer struct {
+	Answer string `json:"answer"`
+}
+
 var secret = []byte("dashdjkashdjkashdjask")
+
+// Generate HMACSHA256 for answers
+func getAnswerSignature(answer string) string {
+	h := hmac.New(sha256.New, secret)
+	h.Write([]byte(answer))
+	return hex.EncodeToString(h.Sum(nil))
+}
 
 func GetCoolChallenge(c *gin.Context) {
 	res, err := cool.GenCaptcha(3, 2)
@@ -27,8 +41,8 @@ func GetCoolChallenge(c *gin.Context) {
 	// TODO: JWT Secret rotation
 
 	if err != nil {
-		c.JSON(500, gin.H{
-			"error": "Server error creating captcha",
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "error creating captcha",
 		})
 		return
 	}
@@ -37,7 +51,7 @@ func GetCoolChallenge(c *gin.Context) {
 	defer res.Close()
 
 	// Set headers
-	c.Status(200)
+	c.Status(http.StatusOK)
 	c.Header("Content-Type", res.Format)
 
 	// Generate jwt for xcool
@@ -50,23 +64,21 @@ func GetCoolChallenge(c *gin.Context) {
 		coolQ.WriteString(x.Question + ",")
 	}
 
-	// Generate HMACSHA256 for answers
-	h := hmac.New(sha256.New, secret)
-	h.Write([]byte(coolTok.String()))
-
 	// Generate jwt
+	curTime := time.Now().Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, CoolJwtClaim{
-		Cool:   hex.EncodeToString(h.Sum(nil)),
-		Action: "//TODO",
+		Cool:    getAnswerSignature(coolTok.String()),
+		Action:  c.Param("action"),
+		Choices: res.Choices,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Unix() + 60_000,
-			Issuer:    "cool",
+			IssuedAt:  curTime,
+			ExpiresAt: curTime + 60, // In seconds
 		},
 	})
 
 	tokenstr, err := token.SignedString(secret)
 	if err != nil {
-		c.JSON(500, gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "JWT Error",
 		})
 		return
@@ -85,10 +97,65 @@ func GetCoolChallenge(c *gin.Context) {
 			}
 			w.Write(buf)
 		}
+		// False I think is for (Should gin keep the connection?)
 		return false
 	})
 }
 
-func VerifyChallenge(c *gin.Context) {
+func VerifyChallenge(action string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		authorization := c.GetHeader("Authorization")
+		if !strings.HasPrefix(authorization, "Bearer ") {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+				"error": "no bearer",
+			})
+			return
+		}
 
+		// Get body early
+		var answer Answer
+		if err := c.ShouldBindJSON(&answer); err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		// Parse token
+		token, err := jwt.ParseWithClaims(strings.Replace(authorization, "Bearer ", "", 1), &CoolJwtClaim{}, func(t *jwt.Token) (interface{}, error) {
+			if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, errors.New("signing method error")
+			}
+
+			// Second variable is whether the type assertion suceeded
+			claims, ok := t.Claims.(*CoolJwtClaim)
+			if !ok {
+				return nil, errors.New("assertion failed")
+			}
+
+			if claims.Action != action {
+				return nil, errors.New("action mismatch")
+			}
+
+			// Verify the answer
+			if claims.Cool != getAnswerSignature(answer.Answer) {
+				return nil, errors.New("wrong answer")
+			}
+			return secret, nil
+		})
+
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		} else if !token.Valid {
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+				"error": "jwt not valid",
+			})
+			return
+		}
+
+		c.Next()
+	}
 }
