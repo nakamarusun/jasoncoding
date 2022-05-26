@@ -74,8 +74,8 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 				}
 
 				rot := rand.Intn(80) - 40
-				x := rand.Intn(cfg.W * 7 / 10)
-				y := rand.Intn(cfg.H/3) - cfg.H/6
+				x := rand.Intn(cfg.W * 6 / 10)
+				y := rand.Intn(cfg.H/4) - cfg.H/8
 
 				if usefont {
 					command = append(command,

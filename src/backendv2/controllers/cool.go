@@ -41,7 +41,7 @@ func GetCoolChallenge(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "error creating captcha",
+			"error": "error creating captcha " + err.Error(),
 		})
 		return
 	}

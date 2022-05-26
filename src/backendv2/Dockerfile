@@ -17,6 +17,8 @@ RUN make build
 
 # Use another image and run the app
 FROM alpine:latest
+RUN apk add imagemagick
+
 WORKDIR /app
 
 # Copy from the first build
