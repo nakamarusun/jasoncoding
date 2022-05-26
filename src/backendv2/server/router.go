@@ -13,7 +13,7 @@ func websiteRoutes(router *gin.Engine) {
 	webGroup := router.Group("/")
 
 	// Override and cors in dev
-	if config.GetConfig().GetString("ENVIRONMENT") == "production" {
+	if config.Cfg.GetString("ENVIRONMENT") == "production" {
 		webGroup.Use(cors.New(cors.Options{
 			AllowedOrigins: []string{"https://jasoncoding.com"},
 		}))

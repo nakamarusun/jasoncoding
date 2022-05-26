@@ -22,7 +22,6 @@ type getContact struct {
 
 func GetIdentityGoog(c *gin.Context) {
 
-	cfg := config.GetConfig()
 	var reqBody getContact
 
 	if err := c.ShouldBindJSON(&reqBody); err != nil {
@@ -32,7 +31,7 @@ func GetIdentityGoog(c *gin.Context) {
 		return
 	}
 
-	params := fmt.Sprintf("?secret=%s&response=%s", cfg.GetString("GCAPTCHA_SECRET"), reqBody.Response)
+	params := fmt.Sprintf("?secret=%s&response=%s", config.Cfg.GetString("GCAPTCHA_SECRET"), reqBody.Response)
 
 	// Create a request to Google's recaptcha confirmer
 	res, err := http.Post("https://www.google.com/recaptcha/api/siteverify"+params, "", nil)
@@ -60,10 +59,9 @@ func GetIdentityGoog(c *gin.Context) {
 	}
 
 	// Send the contact
-	c.Data(http.StatusOK, "application/json", []byte(cfg.GetString("CONTACT")))
+	c.Data(http.StatusOK, "application/json", []byte(config.Cfg.GetString("CONTACT")))
 }
 
 func GetIdentity(c *gin.Context) {
-	cfg := config.GetConfig()
-	c.Data(http.StatusOK, "application/json", []byte(cfg.GetString("CONTACT")))
+	c.Data(http.StatusOK, "application/json", []byte(config.Cfg.GetString("CONTACT")))
 }

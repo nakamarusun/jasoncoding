@@ -5,12 +5,13 @@ import (
 	"github.com/spf13/viper"
 )
 
-var config *viper.Viper
+var Cfg *viper.Viper
 
 // All the necessary variables for this program
 var necessaryVariables = []string{
 	"GCAPTCHA_SECRET",
 	"CONTACT",
+	"JWT_SECRET",
 }
 
 func checkRequiredVars(config *viper.Viper) {
@@ -29,13 +30,9 @@ func checkRequiredVars(config *viper.Viper) {
 }
 
 func Init() {
-	config = viper.New()
-	config.SetDefault("ENVIRONMENT", "development")
-	config.SetDefault("PORT", 8080)
-	config.AutomaticEnv()
-	checkRequiredVars(config)
-}
-
-func GetConfig() *viper.Viper {
-	return config
+	Cfg = viper.New()
+	Cfg.SetDefault("ENVIRONMENT", "development")
+	Cfg.SetDefault("PORT", 8080)
+	Cfg.AutomaticEnv()
+	checkRequiredVars(Cfg)
 }

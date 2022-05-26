@@ -12,6 +12,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"jasoncoding.com/backendv2/config"
 	"jasoncoding.com/backendv2/cool"
 )
 
@@ -26,11 +27,9 @@ type Answer struct {
 	Answer string `json:"answer"`
 }
 
-var secret = []byte("dashdjkashdjkashdjask")
-
 // Generate HMACSHA256 for answers
 func getAnswerSignature(answer string) string {
-	h := hmac.New(sha256.New, secret)
+	h := hmac.New(sha256.New, []byte(config.Cfg.GetString("JWT_SECRET")))
 	h.Write([]byte(answer))
 	return hex.EncodeToString(h.Sum(nil))
 }
@@ -76,7 +75,7 @@ func GetCoolChallenge(c *gin.Context) {
 		},
 	})
 
-	tokenstr, err := token.SignedString(secret)
+	tokenstr, err := token.SignedString([]byte(config.Cfg.GetString("JWT_SECRET")))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "JWT Error",
@@ -141,7 +140,7 @@ func VerifyChallenge(action string) gin.HandlerFunc {
 			if claims.Cool != getAnswerSignature(answer.Answer) {
 				return nil, errors.New("wrong answer")
 			}
-			return secret, nil
+			return []byte(config.Cfg.GetString("JWT_SECRET")), nil
 		})
 
 		if err != nil {

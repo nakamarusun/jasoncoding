@@ -9,15 +9,14 @@ import (
 )
 
 func Init() {
-	cfg := config.GetConfig()
 
 	// Gets the port based on configuration
-	port := cfg.GetString("PORT")
-	log.Printf("Server will run on port %s. Environment is '%s'\n", port, cfg.GetString("ENVIRONMENT"))
+	port := config.Cfg.GetString("PORT")
+	log.Printf("Server will run on port %s. Environment is '%s'\n", port, config.Cfg.GetString("ENVIRONMENT"))
 
 	// Gets the address based on environment
 	addr := ""
-	if cfg.GetString("ENVIRONMENT") == "development" {
+	if config.Cfg.GetString("ENVIRONMENT") == "development" {
 		addr = "127.0.0.1"
 	}
 
