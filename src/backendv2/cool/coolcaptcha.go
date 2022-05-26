@@ -7,6 +7,7 @@ import (
 	"mime"
 	"os/exec"
 	"strconv"
+	"strings"
 	"time"
 
 	"golang.org/x/exp/slices"
@@ -26,6 +27,8 @@ type Result struct {
 	Choices   []string         // Choices to question
 }
 
+var noiser = "( -size %dx%d xc:black -seed %d -attenuate 1.2 +noise random -channel green -separate +channel -virtual-pixel background -blur 0x3 -auto-level -negate -wave 5x40 ) -compose Multiply -composite"
+
 // Generates a new captcha file and contains the answer
 func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 
@@ -36,7 +39,8 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 		"-quality",
 		cfg.Quality,
 		"-gravity",
-		"West"}
+		"West",
+	}
 
 	challenges := make([]QuestionAnswer, 0, answerNum)
 
@@ -83,7 +87,7 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 						cfg.FontList[rand.Intn(len(cfg.FontList))],
 					)
 				}
-
+				// TODO: Font don't overlap with each other
 				// Generate command
 				command = append(command,
 					"-fill",
@@ -100,8 +104,16 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 	}
 
 	// Execute the command and get the stdoutpipe
+	command = append(command,
+		"-wave",
+		strconv.Itoa(rand.Intn(5)+3)+"x100", // Waves
+	)
+	// Add the noisy overlay
+	command = append(command, strings.Split(fmt.Sprintf(noiser, cfg.W, cfg.H+50, rand.Int()), " ")...)
+	// Print resulting image to stdout
 	command = append(command, cfg.ImgFormat+":-")
 	cmd := exec.Command("convert", command...)
+
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return Result{}, err
