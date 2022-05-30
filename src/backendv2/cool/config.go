@@ -19,6 +19,7 @@ type CoolOptions struct {
 	W         int
 	H         int
 	FontList  []string
+	ColRange int // Collision range for the words
 }
 
 func New() CoolOptions {
@@ -74,5 +75,6 @@ func New() CoolOptions {
 		},
 
 		FontList: fontList,
+		ColRange: 20,
 	}
 }

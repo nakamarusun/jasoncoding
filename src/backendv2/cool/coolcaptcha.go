@@ -28,6 +28,11 @@ type Result struct {
 	Choices   []string         // Choices to question
 }
 
+type Coords struct {
+	X int
+	Y int
+}
+
 var noiser = "( -size %dx%d xc:black -seed %d -attenuate 0.35 +noise random -channel green -separate +channel -virtual-pixel background -blur 0x1 -auto-level -negate -wave 5x40 ) -compose Multiply -composite"
 
 // Generates a new captcha file and contains the answer
@@ -70,7 +75,7 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 		l2 := strconv.Itoa(utils.Tern(a2 < cfg.H, 0, a2-cfg.H)) + "," + strconv.Itoa(utils.Tern(a2 < cfg.H, a2, cfg.H))
 		command = append(command,
 			"-strokewidth",
-			strconv.Itoa(rand.Intn(4)),
+			strconv.Itoa(rand.Intn(4)+2),
 			"-stroke",
 			cfg.Colors[rand.Intn(len(cfg.Colors))],
 			"-draw",
@@ -84,10 +89,12 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 	)
 
 	words := make([]string, 0, wrongNum+answerNum)
+	coords := make([]Coords, 0, wrongNum+answerNum)
 	j := 0
 	for i := 0; i < wrongNum+answerNum; i++ {
 		for {
 			if word := cfg.WordList[rand.Intn(len(cfg.WordList))]; !slices.Contains(words, word) {
+				// Get words and insert the selected index to the challenges list
 				words = append(words, word)
 				color := cfg.Colors[rand.Intn(len(cfg.Colors))]
 				if ansIdx[j] == i {
@@ -101,23 +108,42 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 					}
 				}
 
-				rot := rand.Intn(80) - 40
-				x := rand.Intn(cfg.W * 6 / 10)
-				y := rand.Intn(cfg.H/4) - cfg.H/8
+				// Makes sure that words don't overlap
+				var x int
+				var y int
+				for {
+					x = rand.Intn(cfg.W * 6 / 10)
+					y = rand.Intn(cfg.H/4) - cfg.H/8
+					found := false
+					for _, coord := range coords {
+						if utils.PowInts(x-coord.X, 2)+utils.PowInts(y-coord.Y, 2) < utils.PowInts(cfg.ColRange, 2) {
+							found = true
+							break
+						}
+					}
+					if !found {
+						break
+					}
+				}
+				coords = append(coords, Coords{x, y})
 
+				// Whether we are using any fonts or nah
 				if usefont {
 					command = append(command,
 						"-font",
 						cfg.FontList[rand.Intn(len(cfg.FontList))],
 					)
 				}
-				// TODO: Font don't overlap with each other
-				// Generate command
+
+				// Rotation
+				rot := rand.Intn(80) - 40
+
+				// Generate word command
 				command = append(command,
 					"-fill",
 					color,
 					"-pointsize",
-					strconv.Itoa(rand.Intn(50)+40),
+					strconv.Itoa(rand.Intn(35)+55),
 					"-annotate",
 					fmt.Sprintf("%dx%d+%d+%d", rot, rot, x, y),
 					word,
