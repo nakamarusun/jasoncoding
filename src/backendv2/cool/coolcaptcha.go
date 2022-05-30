@@ -33,7 +33,10 @@ type Coords struct {
 	Y int
 }
 
-var noiser = "( -size %dx%d xc:black -seed %d -attenuate 0.35 +noise random -channel green -separate +channel -virtual-pixel background -blur 0x1 -auto-level -negate -wave 5x40 ) -compose Multiply -composite"
+var noiser = "( -size %dx%d xc:black -seed %d -attenuate 0.3 +noise random -channel green -separate +channel -virtual-pixel background -blur 0x1 -auto-level -negate -wave 5x40 ) -compose Multiply -composite"
+
+// Line padder
+var pad = 32
 
 // Generates a new captcha file and contains the answer
 func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
@@ -71,8 +74,8 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 	for i := 0; i < lineCount; i++ {
 		a1 := rand.Intn(cfg.W + cfg.H)
 		a2 := rand.Intn(cfg.W + cfg.H)
-		l1 := strconv.Itoa(utils.Tern(a1 < cfg.W, a1, cfg.W)) + "," + strconv.Itoa(utils.Tern(a1 > cfg.W, a1-cfg.W, 0))
-		l2 := strconv.Itoa(utils.Tern(a2 < cfg.H, 0, a2-cfg.H)) + "," + strconv.Itoa(utils.Tern(a2 < cfg.H, a2, cfg.H))
+		l1 := strconv.Itoa(utils.Tern(a1 < cfg.W, a1, cfg.W+pad)) + "," + strconv.Itoa(utils.Tern(a1 > cfg.W, a1-cfg.W, -pad))
+		l2 := strconv.Itoa(utils.Tern(a2 < cfg.H, -pad, a2-cfg.H)) + "," + strconv.Itoa(utils.Tern(a2 < cfg.H, a2, cfg.H+pad))
 		command = append(command,
 			"-strokewidth",
 			strconv.Itoa(rand.Intn(4)+2),
@@ -153,17 +156,26 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 		}
 	}
 
-	// Execute the command and get the stdoutpipe
+	// Add waves
 	command = append(command,
 		"-wave",
-		strconv.Itoa(rand.Intn(5)+3)+"x100", // Waves
+		strconv.Itoa(rand.Intn(3)+3)+"x100", // Waves
 	)
 	// Add the noisy overlay
 	command = append(command, strings.Split(fmt.Sprintf(noiser, cfg.W, cfg.H+50, rand.Int()), " ")...)
+	// Crop
+	command = append(command,
+		"-gravity",
+		"Center",
+		"-crop",
+		fmt.Sprintf("%dx%d+0+0", cfg.W, cfg.H),
+		"+repage",
+	)
 	// Print resulting image to stdout
 	command = append(command, cfg.ImgFormat+":-")
-	cmd := exec.Command("convert", command...)
 
+	// Execute the command and get the stdoutpipe
+	cmd := exec.Command("convert", command...)
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return Result{}, err
