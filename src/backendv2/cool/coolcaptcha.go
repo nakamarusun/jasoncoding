@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"golang.org/x/exp/slices"
-	"jasoncoding.com/backendv2/utils"
 )
 
 // Stores the question and the answer
@@ -28,7 +27,7 @@ type Result struct {
 	Choices   []string         // Choices to question
 }
 
-var noiser = "( -size %dx%d xc:black -seed %d -attenuate 0.35 +noise random -channel green -separate +channel -virtual-pixel background -blur 0x1 -auto-level -negate -wave 5x40 ) -compose Multiply -composite"
+var noiser = "( -size %dx%d xc:black -seed %d -attenuate 1.2 +noise random -channel green -separate +channel -virtual-pixel background -blur 0x3 -auto-level -negate -wave 5x40 ) -compose Multiply -composite"
 
 // Generates a new captcha file and contains the answer
 func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
@@ -60,29 +59,6 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 	usefont := len(cfg.FontList) >= 0
 
 	// Generates the command and the answers
-
-	// Draw random lines
-	lineCount := rand.Intn(10) + 5
-	for i := 0; i < lineCount; i++ {
-		a1 := rand.Intn(cfg.W + cfg.H)
-		a2 := rand.Intn(cfg.W + cfg.H)
-		l1 := strconv.Itoa(utils.Tern(a1 < cfg.W, a1, cfg.W)) + "," + strconv.Itoa(utils.Tern(a1 > cfg.W, a1-cfg.W, 0))
-		l2 := strconv.Itoa(utils.Tern(a2 < cfg.H, 0, a2-cfg.H)) + "," + strconv.Itoa(utils.Tern(a2 < cfg.H, a2, cfg.H))
-		command = append(command,
-			"-strokewidth",
-			strconv.Itoa(rand.Intn(4)),
-			"-stroke",
-			cfg.Colors[rand.Intn(len(cfg.Colors))],
-			"-draw",
-			fmt.Sprintf("line %s %s", l1, l2),
-		)
-	}
-
-	command = append(command,
-		"-stroke",
-		"None",
-	)
-
 	words := make([]string, 0, wrongNum+answerNum)
 	j := 0
 	for i := 0; i < wrongNum+answerNum; i++ {
@@ -153,6 +129,10 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 		Format:    mime.TypeByExtension("." + cfg.ImgFormat),
 		Choices:   cfg.Colors,
 	}, nil
+}
+
+func CheckCaptcha() bool {
+	return true
 }
 
 // Initializes the coolcaptcha configs
