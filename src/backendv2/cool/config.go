@@ -68,13 +68,13 @@ func New() CoolOptions {
 			"#E69F00",
 			"#56B4E9",
 			"#009E73",
-			"#F0E442",
+			// "#F0E442",
 			"#0072B2",
 			"#D55E00",
 			"#CC79A7",
 		},
 
 		FontList: fontList,
-		ColRange: 50,
+		ColRange: 70,
 	}
 }

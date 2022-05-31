@@ -36,7 +36,8 @@ type Coords struct {
 var noiser = "( -size %dx%d xc:black -seed %d -attenuate 0.3 +noise random -channel green -separate +channel -virtual-pixel background -blur 0x1 -auto-level -negate -wave 5x40 ) -compose Multiply -composite"
 
 // Line padder
-var pad = 32
+var pad = -16
+var textMaxIterate = 15
 
 // Generates a new captcha file and contains the answer
 func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
@@ -68,7 +69,6 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 	usefont := len(cfg.FontList) >= 0
 
 	// Generates the command and the answers
-
 	// Draw random lines
 	lineCount := rand.Intn(10) + 5
 	for i := 0; i < lineCount; i++ {
@@ -93,33 +93,47 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 
 	words := make([]string, 0, wrongNum+answerNum)
 	coords := make([]Coords, 0, wrongNum+answerNum)
-	j := 0
+	colors := make([]string, 0, wrongNum+answerNum)
+	// Index to keep track of font answers
+	curAnswerI := 0
 	for i := 0; i < wrongNum+answerNum; i++ {
 		for {
 			if word := cfg.WordList[rand.Intn(len(cfg.WordList))]; !slices.Contains(words, word) {
 				// Get words and insert the selected index to the challenges list
 				words = append(words, word)
-				color := cfg.Colors[rand.Intn(len(cfg.Colors))]
-				if ansIdx[j] == i {
+
+				// Get distinct colors
+				var color string
+				for {
+					if color = cfg.Colors[rand.Intn(len(cfg.Colors))]; !slices.Contains(colors, color) {
+						colors = append(colors, color)
+						break
+					} else {
+						if len(colors) >= len(cfg.Colors) {
+							break
+						}
+					}
+				}
+				if ansIdx[curAnswerI] == i {
 					// This is the answer
 					challenges = append(challenges, QuestionAnswer{
 						Question: word,
 						Answer:   color,
 					})
-					if j < len(ansIdx)-1 {
-						j++
+					if curAnswerI < len(ansIdx)-1 {
+						curAnswerI++
 					}
 				}
 
 				// Makes sure that words don't overlap
 				var x int
-				var y int
-				for {
+				var yFromMid int // Because we are using gravity west, this starts from mid
+				for i := 0; i < textMaxIterate; i += 1 {
 					x = rand.Intn(cfg.W * 6 / 10)
-					y = rand.Intn(cfg.H/4) - cfg.H/8
+					yFromMid = rand.Intn(cfg.H*3/5) - cfg.H*3/10
 					found := false
 					for _, coord := range coords {
-						if utils.PowInts(x-coord.X, 2)+utils.PowInts(y-coord.Y, 2) < utils.PowInts(cfg.ColRange, 2) {
+						if utils.PowInts(x-coord.X, 2)+utils.PowInts(yFromMid-coord.Y, 2) < utils.PowInts(cfg.ColRange, 2) {
 							found = true
 							break
 						}
@@ -128,7 +142,7 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 						break
 					}
 				}
-				coords = append(coords, Coords{x, y})
+				coords = append(coords, Coords{x, yFromMid})
 
 				// Whether we are using any fonts or nah
 				if usefont {
@@ -139,7 +153,7 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 				}
 
 				// Rotation
-				rot := rand.Intn(80) - 40
+				rot := rand.Intn(20) - 10
 
 				// Generate word command
 				command = append(command,
@@ -148,7 +162,7 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 					"-pointsize",
 					strconv.Itoa(rand.Intn(35)+55),
 					"-annotate",
-					fmt.Sprintf("%dx%d+%d+%d", rot, rot, x, y),
+					fmt.Sprintf("%dx%d+%d+%d", rot, rot, x, yFromMid),
 					word,
 				)
 				break
