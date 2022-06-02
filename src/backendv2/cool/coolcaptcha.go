@@ -33,26 +33,26 @@ type Coords struct {
 	Y int
 }
 
+// Add noise overlay
 var noiser = "( -size %dx%d xc:black -seed %d -attenuate 0.3 +noise random -channel green -separate +channel -virtual-pixel background -blur 0x1 -auto-level -negate -wave 5x40 ) -compose Multiply -composite"
 
 // Line padder
 var pad = -16
-var textMaxIterate = 15
 
-// Generates a new captcha file and contains the answer
-func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
+// Maximum iterations for text trying to find a place that does not collide with each other
+var textMaxIterate = 5
 
-	command := []string{
-		"-size",
-		strconv.Itoa(cfg.W) + "x" + strconv.Itoa(cfg.H),
-		"xc:white",
-		"-quality",
-		cfg.Quality,
-		"-gravity",
-		"West",
-	}
+// Ranges (min, max)
+var linesRange = [2]int{5, 15}
+var strokeRange = [2]int{2, 6}
+var xRange [2]int
+var yHalfRange [2]int
+var rotateRange = [2]int{-15, 15}
+var fontSizeRange = [2]int{55, 90}
+var wavelengthRange = [2]int{5, 10}
 
-	challenges := make([]QuestionAnswer, 0, answerNum)
+// Generates a list of selected words with indices of what should be the right answers.
+func generateWords(wrongNum int, answerNum int) []int {
 
 	// Get the right answer indices
 	ansIdx := make([]int, 0, answerNum)
@@ -64,13 +64,12 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 			}
 		}
 	}
-	slices.Sort(ansIdx)
+	return ansIdx
+}
 
-	usefont := len(cfg.FontList) >= 0
-
-	// Generates the command and the answers
+func drawRandomLines(command []string) []string {
 	// Draw random lines
-	lineCount := rand.Intn(10) + 5
+	lineCount := utils.RandomRangeArray(linesRange)
 	for i := 0; i < lineCount; i++ {
 		a1 := rand.Intn(cfg.W + cfg.H)
 		a2 := rand.Intn(cfg.W + cfg.H)
@@ -78,7 +77,7 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 		l2 := strconv.Itoa(utils.Tern(a2 < cfg.H, -pad, a2-cfg.H)) + "," + strconv.Itoa(utils.Tern(a2 < cfg.H, a2, cfg.H+pad))
 		command = append(command,
 			"-strokewidth",
-			strconv.Itoa(rand.Intn(4)+2),
+			strconv.Itoa(utils.RandomRangeArray(strokeRange)),
 			"-stroke",
 			cfg.Colors[rand.Intn(len(cfg.Colors))],
 			"-draw",
@@ -86,19 +85,40 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 		)
 	}
 
+	// Reset stroke
 	command = append(command,
 		"-stroke",
 		"None",
 	)
+	return command
+}
 
-	words := make([]string, 0, wrongNum+answerNum)
-	coords := make([]Coords, 0, wrongNum+answerNum)
-	colorLeft := make([]string, 0, wrongNum+answerNum)
+func drawAndGenerateChalenges(command []string, textAmount int, correctAnswerIndex []int) ([]string, []QuestionAnswer) {
+	// Sort it
+	slices.Sort(correctAnswerIndex)
+
+	// Whether to use font or not
+	usefont := len(cfg.FontList) >= 0
+
+	// Store challenges here
+	challenges := make([]QuestionAnswer, 0)
+
+	// Words used
+	words := make([]string, 0, textAmount)
+	// Coords list
+	coords := make([]Coords, 0, textAmount)
+	// Colors left that we can use
+	colorLeft := make([]string, textAmount)
+
+	// Copy the color slice so we have a reference
 	copy(colorLeft, cfg.Colors)
 
 	// Index to keep track of font answers
 	curAnswerI := 0
-	for i := 0; i < wrongNum+answerNum; i++ {
+
+	// Loop to create challenges
+	for i := 0; i < textAmount; i++ {
+		// Get distict word
 		var word string
 		for {
 			if word = cfg.WordList[rand.Intn(len(cfg.WordList))]; !slices.Contains(words, word) {
@@ -107,7 +127,7 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 				break
 			}
 		}
-		
+
 		// Get distinct colors
 		var color string
 		if len(colorLeft) > 0 {
@@ -118,23 +138,25 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 			color = cfg.Colors[rand.Intn(len(cfg.Colors))]
 		}
 
-		if ansIdx[curAnswerI] == i {
+		// If the current index is the right answer, append to challenge
+		if correctAnswerIndex[curAnswerI] == i {
 			// This is the answer
 			challenges = append(challenges, QuestionAnswer{
 				Question: word,
 				Answer:   color,
 			})
-			if curAnswerI < len(ansIdx)-1 {
+			if curAnswerI < len(correctAnswerIndex)-1 {
 				curAnswerI++
 			}
 		}
 
-		// Makes sure that words don't overlap
+		// Creates the words at certain coordinates and stores the location.
+		// Location is stored so we can create words that does not collide with previous words.
 		var x int
 		var yFromMid int // Because we are using gravity west, this starts from mid
 		for i := 0; i < textMaxIterate; i += 1 {
-			x = rand.Intn(cfg.W * 6 / 10)
-			yFromMid = rand.Intn(cfg.H*3/5) - cfg.H*3/10
+			x = utils.RandomRangeArray(xRange)
+			yFromMid = utils.RandomRangeArray(yHalfRange)
 			found := false
 			for _, coord := range coords {
 				if utils.PowInts(x-coord.X, 2)+utils.PowInts(yFromMid-coord.Y, 2) < utils.PowInts(cfg.ColRange, 2) {
@@ -157,27 +179,50 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 		}
 
 		// Rotation
-		rot := rand.Intn(30) - 15
+		rot := utils.RandomRangeArray(rotateRange)
 
 		// Generate word command
 		command = append(command,
 			"-fill",
 			color,
 			"-pointsize",
-			strconv.Itoa(rand.Intn(35)+55),
+			strconv.Itoa(utils.RandomRangeArray(fontSizeRange)),
 			"-annotate",
 			fmt.Sprintf("%dx%d+%d+%d", rot, rot, x, yFromMid),
 			word,
 		)
 	}
 
+	return command, challenges
+}
+
+// Generates a new captcha file and contains the answer
+func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
+
+	// Initial command
+	command := []string{
+		"-size",
+		strconv.Itoa(cfg.W) + "x" + strconv.Itoa(cfg.H),
+		"xc:white",
+		"-quality",
+		cfg.Quality,
+		"-gravity",
+		"West",
+	}
+
+	ansIdx := generateWords(wrongNum, answerNum)
+	command = drawRandomLines(command)
+	var challenges []QuestionAnswer
+	command, challenges = drawAndGenerateChalenges(command, wrongNum+answerNum, ansIdx)
+
 	// Add waves
 	command = append(command,
 		"-wave",
-		strconv.Itoa(rand.Intn(3)+3)+"x100", // Waves
+		strconv.Itoa(utils.RandomRangeArray(wavelengthRange))+"x100", // Waves
 	)
 	// Add the noisy overlay
 	command = append(command, strings.Split(fmt.Sprintf(noiser, cfg.W, cfg.H+50, rand.Int()), " ")...)
+
 	// Crop
 	command = append(command,
 		"-gravity",
@@ -212,4 +257,6 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 func Init(options CoolOptions) {
 	cfg = options
 	rand.Seed(time.Now().Unix())
+	xRange = [2]int{0, cfg.W * 6 / 10}
+	yHalfRange = [2]int{-cfg.H * 3 / 10, cfg.H * 3 / 10}
 }

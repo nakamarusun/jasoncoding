@@ -1,5 +1,7 @@
 package utils
 
+import "math/rand"
+
 func Tern[T any](cond bool, a T, b T) T {
 	if cond {
 		return a
@@ -10,9 +12,9 @@ func Tern[T any](cond bool, a T, b T) T {
 // Thanks eatingthenight
 // https://stackoverflow.com/a/57213476
 func RemoveIndex[T any](s []T, index int) []T {
-    ret := make([]T, 0)
-    ret = append(ret, s[:index]...)
-    return append(ret, s[index+1:]...)
+	ret := make([]T, 0)
+	ret = append(ret, s[:index]...)
+	return append(ret, s[index+1:]...)
 }
 
 // Thanks Eissa N.
@@ -29,4 +31,12 @@ func PowInts(x, n int) int {
 		return y * y
 	}
 	return x * y * y
+}
+
+func RandomRange(start int, end int) int {
+	return rand.Intn(end-start) + start
+}
+
+func RandomRangeArray(randomArr [2]int) int {
+	return RandomRange(randomArr[0], randomArr[1])
 }
