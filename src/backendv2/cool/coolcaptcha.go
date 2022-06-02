@@ -93,81 +93,82 @@ func GenCaptcha(wrongNum int, answerNum int) (Result, error) {
 
 	words := make([]string, 0, wrongNum+answerNum)
 	coords := make([]Coords, 0, wrongNum+answerNum)
-	colors := make([]string, 0, wrongNum+answerNum)
+	colorLeft := make([]string, 0, wrongNum+answerNum)
+	copy(colorLeft, cfg.Colors)
+
 	// Index to keep track of font answers
 	curAnswerI := 0
 	for i := 0; i < wrongNum+answerNum; i++ {
+		var word string
 		for {
-			if word := cfg.WordList[rand.Intn(len(cfg.WordList))]; !slices.Contains(words, word) {
+			if word = cfg.WordList[rand.Intn(len(cfg.WordList))]; !slices.Contains(words, word) {
 				// Get words and insert the selected index to the challenges list
 				words = append(words, word)
-
-				// Get distinct colors
-				var color string
-				for {
-					if color = cfg.Colors[rand.Intn(len(cfg.Colors))]; !slices.Contains(colors, color) {
-						colors = append(colors, color)
-						break
-					} else {
-						if len(colors) >= len(cfg.Colors) {
-							break
-						}
-					}
-				}
-				if ansIdx[curAnswerI] == i {
-					// This is the answer
-					challenges = append(challenges, QuestionAnswer{
-						Question: word,
-						Answer:   color,
-					})
-					if curAnswerI < len(ansIdx)-1 {
-						curAnswerI++
-					}
-				}
-
-				// Makes sure that words don't overlap
-				var x int
-				var yFromMid int // Because we are using gravity west, this starts from mid
-				for i := 0; i < textMaxIterate; i += 1 {
-					x = rand.Intn(cfg.W * 6 / 10)
-					yFromMid = rand.Intn(cfg.H*3/5) - cfg.H*3/10
-					found := false
-					for _, coord := range coords {
-						if utils.PowInts(x-coord.X, 2)+utils.PowInts(yFromMid-coord.Y, 2) < utils.PowInts(cfg.ColRange, 2) {
-							found = true
-							break
-						}
-					}
-					if !found {
-						break
-					}
-				}
-				coords = append(coords, Coords{x, yFromMid})
-
-				// Whether we are using any fonts or nah
-				if usefont {
-					command = append(command,
-						"-font",
-						cfg.FontList[rand.Intn(len(cfg.FontList))],
-					)
-				}
-
-				// Rotation
-				rot := rand.Intn(20) - 10
-
-				// Generate word command
-				command = append(command,
-					"-fill",
-					color,
-					"-pointsize",
-					strconv.Itoa(rand.Intn(35)+55),
-					"-annotate",
-					fmt.Sprintf("%dx%d+%d+%d", rot, rot, x, yFromMid),
-					word,
-				)
 				break
 			}
 		}
+		
+		// Get distinct colors
+		var color string
+		if len(colorLeft) > 0 {
+			colI := rand.Intn(len(colorLeft))
+			color = colorLeft[colI]
+			colorLeft = utils.RemoveIndex(colorLeft, colI)
+		} else {
+			color = cfg.Colors[rand.Intn(len(cfg.Colors))]
+		}
+
+		if ansIdx[curAnswerI] == i {
+			// This is the answer
+			challenges = append(challenges, QuestionAnswer{
+				Question: word,
+				Answer:   color,
+			})
+			if curAnswerI < len(ansIdx)-1 {
+				curAnswerI++
+			}
+		}
+
+		// Makes sure that words don't overlap
+		var x int
+		var yFromMid int // Because we are using gravity west, this starts from mid
+		for i := 0; i < textMaxIterate; i += 1 {
+			x = rand.Intn(cfg.W * 6 / 10)
+			yFromMid = rand.Intn(cfg.H*3/5) - cfg.H*3/10
+			found := false
+			for _, coord := range coords {
+				if utils.PowInts(x-coord.X, 2)+utils.PowInts(yFromMid-coord.Y, 2) < utils.PowInts(cfg.ColRange, 2) {
+					found = true
+					break
+				}
+			}
+			if !found {
+				break
+			}
+		}
+		coords = append(coords, Coords{x, yFromMid})
+
+		// Whether we are using any fonts or nah
+		if usefont {
+			command = append(command,
+				"-font",
+				cfg.FontList[rand.Intn(len(cfg.FontList))],
+			)
+		}
+
+		// Rotation
+		rot := rand.Intn(30) - 15
+
+		// Generate word command
+		command = append(command,
+			"-fill",
+			color,
+			"-pointsize",
+			strconv.Itoa(rand.Intn(35)+55),
+			"-annotate",
+			fmt.Sprintf("%dx%d+%d+%d", rot, rot, x, yFromMid),
+			word,
+		)
 	}
 
 	// Add waves

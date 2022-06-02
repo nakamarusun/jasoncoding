@@ -75,6 +75,6 @@ func New() CoolOptions {
 		},
 
 		FontList: fontList,
-		ColRange: 70,
+		ColRange: 50,
 	}
 }
