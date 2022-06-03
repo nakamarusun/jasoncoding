@@ -32,6 +32,7 @@ func New() CoolOptions {
 			fmt.Printf("Error loading fonts %s", err)
 		}
 
+		// Append to array if file format is valid
 		for _, file := range files {
 			filename := file.Name()
 			if !file.IsDir() && (strings.HasSuffix(filename, ".ttf") ||
@@ -68,7 +69,7 @@ func New() CoolOptions {
 			"#E69F00",
 			"#56B4E9",
 			"#009E73",
-			// "#F0E442",
+			// "#F0E442", Bright yellow too hard to see
 			"#0072B2",
 			"#D55E00",
 			"#CC79A7",
